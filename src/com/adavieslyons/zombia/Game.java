@@ -12,29 +12,26 @@ public class Game extends BasicGame {
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Game());
 		app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
-		// app.setTargetFrameRate(100);
+		//app.setTargetFrameRate(60);
 		app.start();
 	}
 	
 	public Game() {
 		super("Zombia");
 	}
-
+	
 	@Override
-	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
-		// TODO Auto-generated method stub
+	public void init(GameContainer gc) throws SlickException {
 		
 	}
 
 	@Override
-	public void init(GameContainer arg0) throws SlickException {
-		// TODO Auto-generated method stub
+	public void render(GameContainer gc, Graphics graphics) throws SlickException {
 		
 	}
 
 	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException {
-		// TODO Auto-generated method stub
+	public void update(GameContainer gc, int delta) throws SlickException {
 		
 	}
 	
