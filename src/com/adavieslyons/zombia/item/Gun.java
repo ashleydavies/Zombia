@@ -43,10 +43,26 @@ public abstract class Gun {
 	}
 	
 	public void update(GameContainer gc, int delta) throws SlickException {
-		if (gc.getInput().isMouseButtonDown(0) && !muzzleFlash) {
+		if ((gc.getInput().isMouseButtonDown(0) && !muzzleFlash)) {
 			muzzleFlash = true;
 			
-			bullets.add(getNewBullet(position, angle));
+			Vector2f position2 = position.copy();
+			
+			position2.x += 24;
+			position2.y += 24;
+			
+			//position2.x += 14;
+			//position2.y += 1;
+			
+			//position2.x += 12 * Math.sin(Math.toRadians(-angle));
+			//position2.y += 6 * Math.cos(Math.toRadians(-angle));
+			
+			angle -= 270;
+			position2.x = (float) (position2.x - (16 * Math.cos(Math.toRadians(angle)) - 16 * Math.sin(Math.toRadians(-angle))));
+			position2.y = (float) (position2.y + (16 * Math.sin(Math.toRadians(-angle)) + 16 * Math.cos(Math.toRadians(angle))));
+			//
+			
+			bullets.add(getNewBullet(position2, angle));
 			fireSound.play();
 		} else if (!gc.getInput().isMouseButtonDown(0)) {
 			muzzleFlash = false;

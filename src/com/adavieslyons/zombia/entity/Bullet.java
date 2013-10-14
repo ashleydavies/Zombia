@@ -19,7 +19,7 @@ public class Bullet {
 		position = origin.copy();
 		velocity = new Vector2f(1, 0);
 		
-		angle -= 90;
+		angle -= 180;
 		
 		velocity.setTheta(angle);
 		image.setRotation(angle - 90);
