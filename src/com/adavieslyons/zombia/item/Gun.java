@@ -1,6 +1,7 @@
 package com.adavieslyons.zombia.item;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -42,8 +43,16 @@ public abstract class Gun {
 		}
 	}
 	
+	protected Random rand = new Random();
+	
 	public void update(GameContainer gc, int delta) throws SlickException {
-		if ((gc.getInput().isMouseButtonDown(0) && !muzzleFlash)) {
+		/*if (gc.getInput().isKeyDown(2))) {
+			
+		}*/
+		if (rand.nextInt(100) > 98) {
+			bullets.clear();
+		}
+		if ((gc.getInput().isMouseButtonDown(0) && !muzzleFlash) || rand.nextInt(100) >= 50) {
 			muzzleFlash = true;
 			
 			Vector2f position2 = position.copy();
@@ -58,8 +67,8 @@ public abstract class Gun {
 			//position2.y += 6 * Math.cos(Math.toRadians(-angle));
 			
 			angle -= 270;
-			position2.x = (float) (position2.x - (16 * Math.cos(Math.toRadians(angle)) - 16 * Math.sin(Math.toRadians(-angle))));
-			position2.y = (float) (position2.y + (16 * Math.sin(Math.toRadians(-angle)) + 16 * Math.cos(Math.toRadians(angle))));
+			position2.x = (float) (position2.x - (20 * Math.cos(Math.toRadians(angle)) + 8 * Math.sin(Math.toRadians(angle))));
+			position2.y = (float) (position2.y - (20 * Math.sin(Math.toRadians(angle)) - 8 * Math.cos(Math.toRadians(angle))));
 			//
 			
 			bullets.add(getNewBullet(position2, angle));
