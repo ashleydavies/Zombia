@@ -6,60 +6,52 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
-import com.adavieslyons.zombia.item.Gun;
-import com.adavieslyons.zombia.item.Pistol;
-
-public class Player extends Entity {
+public class Zombie extends Entity {
 	Image head;
 	Image arms;
-	Gun currentGun;
+	Player player;
 	
 	Vector2f renderPosition = new Vector2f(0, 0);
 	float armAngle = 0.0f;
 	float headAngle = 0.0f;
+	Vector2f velocity;
+	float speed;
 	
-	public Player() throws SlickException {
-		head = new Image("resource/img/man_head.png");
-		arms = new Image("resource/img/man_arms.png");
-		currentGun = new Pistol();
+	public Zombie(Player player, Vector2f spawnPosition) throws SlickException {
+		head = new Image("resource/img/zombie_head.png");
+		arms = new Image("resource/img/zombie_arms.png");
+		this.player = player;
+		this.renderPosition = spawnPosition;
 	}
 	
 	@Override
 	public void init(GameContainer gc) {
-		int centerX = gc.getWidth() / 2 - head.getWidth() / 2;
-		int centerY = gc.getHeight() / 2 - head.getHeight() / 2;
-		
-		renderPosition = new Vector2f(centerX, centerY);
-		currentGun.setPosition(renderPosition);
+		System.out.println("Zombie initialised");
+		//renderPosition = new Vector2f(0, 0);
+		velocity = new Vector2f(1, 0);
+		speed = 0.5f;
 	}
 	
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
-		float xDistance = gc.getInput().getMouseX() - renderPosition.getX() - 24;
-		float yDistance = gc.getInput().getMouseY() - renderPosition.getY() - 24;
+		float xDistance = player.getWorldPos().getX() - renderPosition.getX();
+		float yDistance = player.getWorldPos().getY() - renderPosition.getY();
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance)) + 90;
 		
 		armAngle = (float) angleToTurn;
 		headAngle = armAngle;
 		
+		velocity.setTheta(angleToTurn - 90);
+		
+		renderPosition.add(velocity.copy().scale(speed));	
 		
 		arms.setRotation(armAngle);
 		head.setRotation(headAngle);
-		
-		currentGun.setAngle(armAngle);
-		
-		currentGun.update(gc, delta);
 	}
 
 	@Override
 	public void render(GameContainer gc, Graphics graphics) {
 		graphics.drawImage(arms, renderPosition.getX(), renderPosition.getY());
 		graphics.drawImage(head, renderPosition.getX(), renderPosition.getY());
-		
-		currentGun.render(gc, graphics);
-	}
-	
-	public Vector2f getWorldPos() {
-		return renderPosition; // TODO: Patch
 	}
 }

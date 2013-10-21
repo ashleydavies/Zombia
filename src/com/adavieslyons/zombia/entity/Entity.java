@@ -11,4 +11,5 @@ public abstract class Entity {
 	
 	public abstract void update(GameContainer gc, int delta) throws SlickException;
 	public abstract void render(GameContainer gc, Graphics graphics);
+	public abstract void init(GameContainer gc);
 }

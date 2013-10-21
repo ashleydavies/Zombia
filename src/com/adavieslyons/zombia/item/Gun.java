@@ -47,16 +47,16 @@ public abstract class Gun {
 		if (gc.getInput().isMouseButtonDown(0) && !muzzleFlash) {
 			muzzleFlash = true;
 			
-			Vector2f position2 = position.copy();
+			Vector2f bulletPosition = position.copy();
 			
-			position2.x += 24;
-			position2.y += 24;
+			bulletPosition.x += 24;
+			bulletPosition.y += 24;
 			
 			angle -= 270;
-			position2.x = (float) (position2.x - (20 * Math.cos(Math.toRadians(angle)) + 8 * Math.sin(Math.toRadians(angle))));
-			position2.y = (float) (position2.y - (20 * Math.sin(Math.toRadians(angle)) - 8 * Math.cos(Math.toRadians(angle))));
+			bulletPosition.x = (float) (bulletPosition.x - (20 * Math.cos(Math.toRadians(angle)) + 8 * Math.sin(Math.toRadians(angle))));
+			bulletPosition.y = (float) (bulletPosition.y - (20 * Math.sin(Math.toRadians(angle)) - 8 * Math.cos(Math.toRadians(angle))));
 			
-			bullets.add(getNewBullet(position2, angle));
+			bullets.add(getNewBullet(bulletPosition, angle));
 			fireSound.play();
 		} else if (!gc.getInput().isMouseButtonDown(0)) {
 			muzzleFlash = false;

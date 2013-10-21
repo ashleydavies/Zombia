@@ -13,7 +13,7 @@ public abstract class GameState {
 		this.gsm = gsm;
 	}
 	
-	public abstract void init(GameContainer gc);
+	public abstract void init(GameContainer gc) throws SlickException;
 	public abstract void update(GameContainer gc, int delta) throws SlickException;
 	public abstract void render(GameContainer gc, Graphics graphics);
 }

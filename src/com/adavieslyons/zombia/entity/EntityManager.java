@@ -33,4 +33,11 @@ public class EntityManager {
 			e.render(gc, graphics);
 		}
 	}
+
+	public void initEntities(GameContainer gc) {
+		System.out.println("Initialising entities");
+		for (Entity e : entities) {
+			e.init(gc);
+		}
+	}
 }
