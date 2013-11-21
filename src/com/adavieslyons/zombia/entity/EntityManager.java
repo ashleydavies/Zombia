@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 
 public class EntityManager {
 	ArrayList<Entity> entities;
+	ArrayList<Entity> entityRemovalQueue;
 	
 	public EntityManager() {
 		entities = new ArrayList<Entity>();
@@ -18,13 +19,19 @@ public class EntityManager {
 	}
 	
 	public void removeEntity(Entity entity) {
-		entities.remove(entity);
+		entityRemovalQueue.add(entity);
 	}
 	
 	
 	public void update(GameContainer gc, int delta) throws SlickException {
+		entityRemovalQueue = new ArrayList<Entity>();
+		
 		for (Entity e : entities) {
 			e.update(gc, delta);
+		}
+		
+		for (Entity e : entityRemovalQueue) {
+			entities.remove(e);
 		}
 	}
 	
@@ -39,5 +46,9 @@ public class EntityManager {
 		for (Entity e : entities) {
 			e.init(gc);
 		}
+	}
+	
+	public ArrayList<Entity> getEntities() {
+		return entities;
 	}
 }

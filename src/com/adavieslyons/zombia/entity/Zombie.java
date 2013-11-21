@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Zombie extends Entity {
@@ -22,14 +23,14 @@ public class Zombie extends Entity {
 		arms = new Image("resource/img/zombie_arms.png");
 		this.player = player;
 		this.renderPosition = spawnPosition;
+		this.position = spawnPosition;
 	}
 	
 	@Override
 	public void init(GameContainer gc) {
-		System.out.println("Zombie initialised");
 		//renderPosition = new Vector2f(0, 0);
 		velocity = new Vector2f(1, 0);
-		speed = 0.5f;
+		speed = 0.18f;
 	}
 	
 	@Override
@@ -37,13 +38,13 @@ public class Zombie extends Entity {
 		float xDistance = player.getWorldPos().getX() - renderPosition.getX();
 		float yDistance = player.getWorldPos().getY() - renderPosition.getY();
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance)) + 90;
-		
 		armAngle = (float) angleToTurn;
 		headAngle = armAngle;
 		
 		velocity.setTheta(angleToTurn - 90);
 		
-		renderPosition.add(velocity.copy().scale(speed));	
+		position.add(velocity.copy().scale(speed));
+		renderPosition.add(velocity.copy().scale(speed));
 		
 		arms.setRotation(armAngle);
 		head.setRotation(headAngle);

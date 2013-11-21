@@ -15,19 +15,19 @@ import com.adavieslyons.zombia.gamestate.GameStateManager;
 public class StateGame extends GameState {
 	EntityManager eManager;
 	Player player;
+	Random rnd = new Random();
 	
 	public StateGame(GameStateManager gsm) throws SlickException {
 		super(gsm);
 		
 		eManager = new EntityManager();
-		player = new Player();
+		player = new Player(eManager);
 	}
 	
 	public void init(GameContainer gc) throws SlickException {
 		eManager.addEntity(player);
-		Random rnd = new Random();
 		
-		//Spawn in some zombies to fight
+		/*//Spawn in some zombies to fight
 		for (int i = 0; i < 50; i++) {
 			Vector2f spawnPosition = new Vector2f();
 			do {
@@ -36,7 +36,7 @@ public class StateGame extends GameState {
 					|| (spawnPosition.getY() > gc.getHeight() / 2 - 60 && spawnPosition.getY() < gc.getHeight() / 2 + 6));
 			
 			eManager.addEntity(new Zombie(player, spawnPosition));
-		}
+		}*/
 		
 		eManager.initEntities(gc);
 		//player.init(gc);
@@ -45,6 +45,17 @@ public class StateGame extends GameState {
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		eManager.update(gc, delta);
+		
+		if (Math.ceil(Math.random() * 15) == 1) {
+			float degrees = rnd.nextInt(360);
+			
+			float x = (float) (player.getWorldPos().getX() + 500 * Math.sin(degrees));
+			float y = (float) (player.getWorldPos().getY() + 500 * Math.cos(degrees));
+			
+			Zombie z = new Zombie(player, new Vector2f(x, y));
+			z.init(gc);
+			eManager.addEntity(z);
+		}
 	}
 	
 	@Override

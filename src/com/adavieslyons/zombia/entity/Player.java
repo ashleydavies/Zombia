@@ -17,11 +17,14 @@ public class Player extends Entity {
 	Vector2f renderPosition = new Vector2f(0, 0);
 	float armAngle = 0.0f;
 	float headAngle = 0.0f;
+	EntityManager eManager;
 	
-	public Player() throws SlickException {
+	public Player(EntityManager eManager) throws SlickException {
 		head = new Image("resource/img/man_head.png");
 		arms = new Image("resource/img/man_arms.png");
-		currentGun = new Pistol();
+		
+		this.eManager = eManager;
+		currentGun = new Pistol(eManager);
 	}
 	
 	@Override
