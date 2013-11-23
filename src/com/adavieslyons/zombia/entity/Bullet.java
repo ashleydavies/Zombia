@@ -44,7 +44,7 @@ public class Bullet {
 		
 		
 		position.add(
-				velocity.copy().scale(speed)
+				velocity.copy().scale(speed * delta / 1000)
 				);
 		
 		for (Entity e : eManager.getEntities()) {

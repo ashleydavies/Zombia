@@ -26,7 +26,7 @@ public class StateGame extends GameState {
 		
 		eManager = new EntityManager();
 		player = new Player(eManager);
-		shop = new Shop(eManager);
+		shop = new Shop(eManager, player);
 	}
 	
 	public void init(GameContainer gc) throws SlickException {
@@ -83,5 +83,6 @@ public class StateGame extends GameState {
 	public void waveCompleted() {
 		inWave = false;
 		zombieWaveIntermissionTimer = 30000.0f;
+		player.giveMoney((waveNumber + 1) * 25);
 	}
 }

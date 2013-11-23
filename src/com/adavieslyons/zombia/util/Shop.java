@@ -52,9 +52,16 @@ public class Shop {
 			
 			graphics.setColor(Color.yellow);
 			graphics.drawString(gun.getName(), getLocalX(gc) + 82 + 5 + 6, getLocalY(gc) + 5 + 5);
-			graphics.drawString("$" + gun.getPrice(), getLocalX(gc) + 82 + 5 + 6, getLocalY(gc) + 18 + 5 + 5);
 			
-			
+			if (player.hasGun(gun.getClass())) {
+				graphics.setColor(Color.red);
+				graphics.drawString("owned", getLocalX(gc) + 82 + 5 + 6, getLocalY(gc) + 18 + 5 + 5);
+			}
+			else
+			{
+				graphics.setColor(Color.yellow);
+				graphics.drawString("$" + gun.getPrice(), getLocalX(gc) + 82 + 5 + 6, getLocalY(gc) + 18 + 5 + 5);
+			}
 		}
 	}
 	

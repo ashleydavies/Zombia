@@ -1,5 +1,6 @@
 package com.adavieslyons.zombia.entity;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -16,7 +17,7 @@ public class Player extends Entity {
 	Image head;
 	Image arms;
 	ArrayList<Gun> guns;
-	Gun currentGun;
+	int currentGun;
 	
 	private int money;
 	float armAngle = 0.0f;
@@ -28,7 +29,8 @@ public class Player extends Entity {
 		head = new Image("resource/img/man_head.png");
 		arms = new Image("resource/img/man_arms.png");
 		
-		currentGun = new Pistol(eManager);
+		guns = new ArrayList<Gun>();
+		guns.add(new Pistol(eManager));
 	}
 	
 	@Override
@@ -37,7 +39,7 @@ public class Player extends Entity {
 		int centerY = gc.getHeight() / 2 - head.getHeight() / 2;
 		
 		renderPosition = new Vector2f(centerX, centerY);
-		currentGun.setPosition(renderPosition);
+		guns.get(currentGun).setPosition(renderPosition);
 	}
 	
 	@Override
@@ -53,9 +55,9 @@ public class Player extends Entity {
 		arms.setRotation(armAngle);
 		head.setRotation(headAngle);
 		
-		currentGun.setAngle(armAngle);
+		guns.get(currentGun).setAngle(armAngle);
 		
-		currentGun.update(gc, delta);
+		guns.get(currentGun).update(gc, delta);
 		
 		coreEntityUpdate(gc, delta);
 	}
@@ -65,14 +67,14 @@ public class Player extends Entity {
 		graphics.drawImage(arms, renderPosition.getX(), renderPosition.getY());
 		graphics.drawImage(head, renderPosition.getX(), renderPosition.getY());
 		
-		currentGun.render(gc, graphics);
+		guns.get(currentGun).render(gc, graphics);
 	}
 	
 	@Override
 	public void renderUI(GameContainer gc, Graphics graphics) {
 		// TODO: HP bar at bottom! Override method!
 		//renderHPBar(gc, graphics);
-		currentGun.renderUI(gc, graphics);
+		guns.get(currentGun).renderUI(gc, graphics);
 		
 		// Render gold
 		graphics.setColor(Color.black);
@@ -85,6 +87,16 @@ public class Player extends Entity {
 	
 	public Vector2f getWorldPos() {
 		return renderPosition; // TODO: Patch
+	}
+	
+	public boolean hasGun(Class<?> gunType) {
+		for (Gun gun : guns) {
+			if (gun.getClass() == gunType) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public void giveMoney(int moneyEarned) {

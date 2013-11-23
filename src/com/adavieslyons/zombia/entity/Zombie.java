@@ -50,8 +50,12 @@ public class Zombie extends Entity {
 			headAngle = armAngle;
 			
 			velocity.setTheta(angleToTurn - 90);
+			System.out.println(velocity);
+			System.out.println(delta);
+			position.add(
+					velocity.copy().scale(speed * (delta / 1000))
+					);
 			
-			position.add(velocity.copy().scale(speed));
 			renderPosition.add(velocity.copy().scale(speed));
 			
 			arms.setRotation(armAngle);
