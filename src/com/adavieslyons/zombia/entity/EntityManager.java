@@ -39,6 +39,10 @@ public class EntityManager {
 		for (Entity e : entities) {
 			e.render(gc, graphics);
 		}
+		
+		for (Entity e : entities) {
+			e.renderUI(gc, graphics);
+		}
 	}
 
 	public void initEntities(GameContainer gc) {

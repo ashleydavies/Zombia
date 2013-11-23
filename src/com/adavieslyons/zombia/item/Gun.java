@@ -2,6 +2,7 @@ package com.adavieslyons.zombia.item;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -13,10 +14,12 @@ import com.adavieslyons.zombia.entity.Bullet;
 import com.adavieslyons.zombia.entity.EntityManager;
 
 public abstract class Gun {
-	String name;
+	private final String name;
 	Image gunImage;
 	Image muzzleImage;
+	private Image thumbnailImage;
 	Sound fireSound;
+	Sound reloadSound;
 	ArrayList<Bullet> bullets;
 	ArrayList<Bullet> bulletsToBeDeleted;
 	Vector2f position;
@@ -25,9 +28,14 @@ public abstract class Gun {
 	
 	int ammo;
 	int ammoClip;
+	final int ammoMax;
 	final int ammoClipMax;
 	
-	boolean firing = false;	
+	private final int price;
+	private final int ammoPrice;
+	
+	boolean owned = false;
+	boolean firing = false;
 	boolean muzzleFlash = false;
 	boolean recoiling = false;
 	boolean reloading = false;
@@ -36,20 +44,25 @@ public abstract class Gun {
 	float reloadTimer;
 	float recoilTimer;
 	
-	public Gun(String a_name, EntityManager eManager, int ammo, int ammoClipMax, float reloadTime, float recoilTime) throws SlickException {
+	public Gun(String a_name, EntityManager eManager, int ammo, int ammoClipMax, float reloadTime, float recoilTime, int price, int ammoPrice) throws SlickException {
 		gunImage = new Image("resource/img/" + a_name + ".png");
 		muzzleImage = new Image("resource/img/" + a_name + "_muzzleflash.png");
+		thumbnailImage = new Image("resource/img/" + a_name + "_thumbnail.png");
 		fireSound = new Sound("resource/snd/" + a_name + ".ogg");
+		reloadSound = new Sound("resource/snd/" + a_name + "_reload.ogg");
 		name = a_name;
 		bullets = new ArrayList<Bullet>();
 		bulletsToBeDeleted = new ArrayList<Bullet>();
 		this.eManager = eManager;
 		
 		this.ammo = ammo;
+		this.ammoMax = ammo;
 		this.ammoClipMax = ammoClipMax;
 		this.ammoClip = ammoClipMax;
 		this.reloadTime = reloadTime;
 		this.recoilTime = recoilTime;
+		this.price = price;
+		this.ammoPrice = ammoPrice;
 	}
 	
 	public void render(GameContainer gc, Graphics graphics) {		
@@ -64,6 +77,15 @@ public abstract class Gun {
 		}
 		
 		muzzleFlash = false;
+	}
+	
+	public void renderUI(GameContainer gc, Graphics graphics) {
+		graphics.setColor(Color.black);
+		graphics.setAntiAlias(true);
+		graphics.fillRect(0, gc.getHeight() - 32, 96, 32);
+		graphics.fillOval(64, gc.getHeight() - 32, 64, 64);
+		graphics.setColor(Color.white);
+		graphics.drawString(ammoClip + " / " + ammo, 12, gc.getHeight() - 24);
 	}
 	
 	public void update(GameContainer gc, int delta) throws SlickException {
@@ -105,6 +127,7 @@ public abstract class Gun {
 				}
 				
 				reloading = true;
+				reloadSound.play();
 			}
 			
 			recoiling = true;
@@ -149,6 +172,22 @@ public abstract class Gun {
 	
 	public void removeBullet(Bullet bullet) {
 		bulletsToBeDeleted.add(bullet);
+	}
+
+	public Image getThumbnail() {
+		return thumbnailImage;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getPrice() {
+		return price;
+	}
+	
+	public int getAmmoPrice() {
+		return ammoPrice;
 	}
 	
 	public abstract Bullet getNewBullet(Vector2f origin, float angle) throws SlickException;

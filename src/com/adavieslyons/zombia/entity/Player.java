@@ -1,5 +1,8 @@
 package com.adavieslyons.zombia.entity;
 
+import java.util.ArrayList;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -12,18 +15,19 @@ import com.adavieslyons.zombia.item.Pistol;
 public class Player extends Entity {
 	Image head;
 	Image arms;
+	ArrayList<Gun> guns;
 	Gun currentGun;
 	
-	Vector2f renderPosition = new Vector2f(0, 0);
+	private int money;
 	float armAngle = 0.0f;
 	float headAngle = 0.0f;
-	EntityManager eManager;
 	
 	public Player(EntityManager eManager) throws SlickException {
+		super(eManager);
+		
 		head = new Image("resource/img/man_head.png");
 		arms = new Image("resource/img/man_arms.png");
 		
-		this.eManager = eManager;
 		currentGun = new Pistol(eManager);
 	}
 	
@@ -52,6 +56,8 @@ public class Player extends Entity {
 		currentGun.setAngle(armAngle);
 		
 		currentGun.update(gc, delta);
+		
+		coreEntityUpdate(gc, delta);
 	}
 
 	@Override
@@ -62,7 +68,30 @@ public class Player extends Entity {
 		currentGun.render(gc, graphics);
 	}
 	
+	@Override
+	public void renderUI(GameContainer gc, Graphics graphics) {
+		// TODO: HP bar at bottom! Override method!
+		//renderHPBar(gc, graphics);
+		currentGun.renderUI(gc, graphics);
+		
+		// Render gold
+		graphics.setColor(Color.black);
+		graphics.setAntiAlias(true);
+		graphics.fillRect(gc.getWidth() - 96, 0, 96, 32);
+		graphics.fillOval(gc.getWidth() - 128, -32, 64, 64);
+		graphics.setColor(Color.yellow);
+		graphics.drawString("$" + money, gc.getWidth() - 96, 6);
+	}
+	
 	public Vector2f getWorldPos() {
 		return renderPosition; // TODO: Patch
+	}
+
+	public void giveMoney(int moneyEarned) {
+		money += moneyEarned;
+	}
+
+	int getMoney() {
+		return money;
 	}
 }

@@ -1,5 +1,7 @@
 package com.adavieslyons.zombia;
 
+import java.util.Random;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -12,13 +14,15 @@ import com.adavieslyons.zombia.gamestate.GameStateManager;
 import com.adavieslyons.zombia.gamestate.states.StateGame;
 
 public class Game extends BasicGame {
+	public static Random rnd = new Random();
+	
 	Image cursor;
 	GameStateManager gsm;
 	
 	// Entry method
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Game());
-		app.setDisplayMode(680, 680, false);
+		app.setDisplayMode(820, 820, false);
 		app.setTargetFrameRate(60);
 		app.start();
 	}

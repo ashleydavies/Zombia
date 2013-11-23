@@ -13,11 +13,12 @@ public class Bullet {
 	private Vector2f position;
 	private Vector2f velocity;
 	private final float speed;
+	private final float damage;
 	private Gun parent;
 	private EntityManager eManager;
 	private float time;
 	
-	public Bullet(Gun parent, float a_speed, Vector2f origin, float angle, String imageName, EntityManager eManager) throws SlickException {
+	public Bullet(Gun parent, float a_speed, Vector2f origin, float angle, String imageName, EntityManager eManager, float damage) throws SlickException {
 		this.parent = parent;
 		this.speed = a_speed;
 		image = new Image(imageName);
@@ -31,6 +32,7 @@ public class Bullet {
 		image.setRotation(angle - 90);
 		
 		this.eManager = eManager;
+		this.damage = damage;
 	}
 	
 	public void update(GameContainer gc, int delta) {
@@ -46,10 +48,10 @@ public class Bullet {
 				);
 		
 		for (Entity e : eManager.getEntities()) {
-			if (e.position.copy().add(new Vector2f(16, 16)).distance(position) < 15) {
+			if (e.position.copy().add(new Vector2f(24, 24)).distance(position) < 15) {
 				// No concurrent modification exceptions since this is pushed into a queue dealt with after updating all entities.
 				if (!(e instanceof Player)) {
-					eManager.removeEntity(e);
+					e.takeDamage(damage);
 					parent.removeBullet(this);
 					break;
 				}

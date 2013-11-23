@@ -9,7 +9,7 @@ import com.adavieslyons.zombia.entity.PistolBullet;
 
 public class Pistol extends Gun {
 	public Pistol(EntityManager eManager) throws SlickException {
-		super("pistol", eManager, 64, 6, 800f, 300f);
+		super("pistol", eManager, 128, 6, 800f, 250f, 0, 0);
 	}
 
 	@Override
