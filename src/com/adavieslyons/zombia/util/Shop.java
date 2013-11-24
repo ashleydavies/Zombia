@@ -18,6 +18,8 @@ public class Shop {
 	public ArrayList<Gun> guns;
 	private Image shopBackground;
 	private Image shopHoverBackground;
+	private Image shopButton;
+	private Image shopButtonDown;
 	private Player player;
 	private int gunSelected;
 	
@@ -30,6 +32,8 @@ public class Shop {
 		
 		shopBackground = new Image("resource/img/shop.png");
 		shopHoverBackground = new Image("resource/img/shop_hover.png");
+		shopButton = new Image("resource/img/shop_button.png");
+		shopButtonDown = new Image("resource/img/shop_button_down.png");
 		
 		this.player = player;
 	}
@@ -66,7 +70,7 @@ public class Shop {
 			int bXL = tXL + shopHoverBackground.getWidth();
 			int bYL = tYL + shopHoverBackground.getHeight();
 			
-			if (gc.getInput().getMouseX() > tXL && gc.getInput().getMouseX() < tXL && gc.getInput().getMouseY() > tYL && gc.getInput().getMouseY() < bYL) {
+			if (gc.getInput().getMouseX() > tXL && gc.getInput().getMouseX() < bXL && gc.getInput().getMouseY() > tYL && gc.getInput().getMouseY() < bYL) {
 				graphics.drawImage(shopHoverBackground, tXL, tYL);
 			}
 			
@@ -90,7 +94,19 @@ public class Shop {
 		}
 		
 		// Draw selected gun information on the right hand side of the shop
-		graphics.drawImage(guns.get(gunSelected).getThumbnail(), tX + 217, tY + 5);
+		Gun selectedGun = guns.get(gunSelected);
+		
+		graphics.drawImage(selectedGun.getThumbnail(), tX + 217, tY + 5);
+		graphics.setColor(Color.yellow);
+		graphics.drawString(selectedGun.getShopName(), tX + 217 + 12, tY + 261 + 12);
+		
+		if (player.hasGun(selectedGun.getClass())) {
+			graphics.setColor(Color.red);
+			graphics.drawString("Owned", tX + 543 - 12 - graphics.getFont().getWidth("Owned"), tY + 261 + 12);
+		} else {
+			graphics.setColor(Color.yellow);
+			graphics.drawString("$" + selectedGun.getPrice(), tX + 543 - 12 - graphics.getFont().getWidth("$" + selectedGun.getPrice()), tY + 261 + 12);
+		}
 	}
 	
 	public int getLocalX(GameContainer gc) {
