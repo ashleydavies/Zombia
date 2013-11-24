@@ -40,18 +40,29 @@ public class Shop {
 	
 	public void update(GameContainer gc, int delta) {
 		int id = 0;
+		
+		int tX = getLocalX(gc);
+		int tY = getLocalY(gc);
+		
 		for (Gun gun : guns) {
-			int tX = getLocalX(gc) + 6;
-			int tY = getLocalY(gc) + 5 + 71 * id;
-			int bX = tX + shopHoverBackground.getWidth();
-			int bY = tY + shopHoverBackground.getHeight();
+			int tXL = tX + 6;
+			int tYL = tY + 5 + 71 * id;
 			
-			if (gc.getInput().isMouseButtonDown(0) && gc.getInput().getMouseX() > tX && gc.getInput().getMouseX() < bX && gc.getInput().getMouseY() > tY && gc.getInput().getMouseY() < bY) {
+			int bXL = tXL + shopHoverBackground.getWidth();
+			int bYL = tYL + shopHoverBackground.getHeight();
+			
+			if (gc.getInput().isMouseButtonDown(0) && mouseInside(gc, tXL, tYL, bXL, bYL)) {
 				// Load the gun into the big selection
 				gunSelected = id;
 			}
 			
 			id++;
+		}
+		
+		if (gc.getInput().isMouseButtonDown(0) && mouseInside(gc, 400, tY + 500, 400 + shopButton.getWidth(), tY + 500 + shopButton.getHeight())) {
+			if (player.getMoney() > guns.get(gunSelected).getPrice() && !player.hasGun(guns.get(gunSelected).getClass())) {
+				buy(gunSelected);
+			}
 		}
 	}
 	
@@ -70,7 +81,7 @@ public class Shop {
 			int bXL = tXL + shopHoverBackground.getWidth();
 			int bYL = tYL + shopHoverBackground.getHeight();
 			
-			if (gc.getInput().getMouseX() > tXL && gc.getInput().getMouseX() < bXL && gc.getInput().getMouseY() > tYL && gc.getInput().getMouseY() < bYL) {
+			if (mouseInside(gc, tXL, tYL, bXL, bYL)) {
 				graphics.drawImage(shopHoverBackground, tXL, tYL);
 			}
 			
@@ -100,6 +111,15 @@ public class Shop {
 		graphics.setColor(Color.yellow);
 		graphics.drawString(selectedGun.getShopName(), tX + 217 + 12, tY + 261 + 12);
 		
+		if (!mouseInside(gc, 400, tY + 500, 400 + shopButton.getWidth(), tY + 500 + shopButton.getHeight())) {
+			graphics.drawImage(shopButton, 400, tY + 500);
+		} else {
+			graphics.drawImage(shopButtonDown, 400, tY + 500);
+		}
+		
+		graphics.setColor(Color.yellow);
+		graphics.drawString("Buy", 400 + shopButton.getWidth() / 2 - graphics.getFont().getWidth("Buy") / 2, tY + 500 + shopButton.getHeight() / 2 - graphics.getFont().getHeight("Buy") / 2);
+		
 		if (player.hasGun(selectedGun.getClass())) {
 			graphics.setColor(Color.red);
 			graphics.drawString("Owned", tX + 543 - 12 - graphics.getFont().getWidth("Owned"), tY + 261 + 12);
@@ -109,11 +129,24 @@ public class Shop {
 		}
 	}
 	
+	public boolean mouseInside(GameContainer gc, int x1, int y1, int x2, int y2) {
+		if (gc.getInput().getMouseX() > x1 && gc.getInput().getMouseX() < x2 && gc.getInput().getMouseY() > y1 && gc.getInput().getMouseY() < y2) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public int getLocalX(GameContainer gc) {
 		return gc.getWidth() / 2 - shopBackground.getWidth() / 2;
 	}
 	
 	public int getLocalY(GameContainer gc) {
 		return gc.getHeight() / 2 - shopBackground.getHeight() / 2;
+	}
+
+	public void buy(int i) {
+		player.giveMoney(-guns.get(i).getPrice());
+		player.giveGun(guns.get(i));
 	}
 }

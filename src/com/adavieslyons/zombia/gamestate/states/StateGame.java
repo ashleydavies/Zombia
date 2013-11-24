@@ -34,6 +34,7 @@ public class StateGame extends GameState {
 		
 		wave = new ZombieWave(0, eManager, player, this);
 		wave.initialise(gc);
+		shop.buy(0);
 		
 		player.init(gc);
 		//eManager.initEntities(gc);

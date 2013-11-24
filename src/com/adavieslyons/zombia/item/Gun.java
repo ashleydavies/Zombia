@@ -67,18 +67,21 @@ public abstract class Gun {
 		this.ammoPrice = ammoPrice;
 	}
 	
-	public void render(GameContainer gc, Graphics graphics) {		
-		graphics.drawImage(gunImage, position.getX(), position.getY());
-		
-		if (muzzleFlash) {
-			graphics.drawImage(muzzleImage, position.getX(), position.getY());
+	public void render(GameContainer gc, Graphics graphics) {
+		// Stop bugs where render runs before player tells the gun it's position.
+		if (!(position == null)) {
+			graphics.drawImage(gunImage, position.getX(), position.getY());
+			
+			if (muzzleFlash) {
+				graphics.drawImage(muzzleImage, position.getX(), position.getY());
+			}
+			
+			for (Bullet bullet : bullets) {
+				bullet.render(gc, graphics);
+			}
+			
+			muzzleFlash = false;
 		}
-		
-		for (Bullet bullet : bullets) {
-			bullet.render(gc, graphics);
-		}
-		
-		muzzleFlash = false;
 	}
 	
 	public void renderUI(GameContainer gc, Graphics graphics) {

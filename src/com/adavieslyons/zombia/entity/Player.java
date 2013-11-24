@@ -10,8 +10,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 import com.adavieslyons.zombia.item.Gun;
-import com.adavieslyons.zombia.item.Magnum;
-import com.adavieslyons.zombia.item.Pistol;
 
 public class Player extends Entity {
 	Image head;
@@ -30,8 +28,6 @@ public class Player extends Entity {
 		arms = new Image("resource/img/man_arms.png");
 		
 		guns = new ArrayList<Gun>();
-		guns.add(new Pistol(eManager));
-		currentGun = 0;
 	}
 	
 	@Override
@@ -40,7 +36,7 @@ public class Player extends Entity {
 		int centerY = gc.getHeight() / 2 - head.getHeight() / 2;
 		
 		renderPosition = new Vector2f(centerX, centerY);
-		guns.get(currentGun).setPosition(renderPosition);
+		equipGun(guns.get(0));
 	}
 	
 	@Override
@@ -104,7 +100,7 @@ public class Player extends Entity {
 		money += moneyEarned;
 	}
 
-	int getMoney() {
+	public int getMoney() {
 		return money;
 	}
 
@@ -115,5 +111,15 @@ public class Player extends Entity {
 		for (Gun gun : guns) {
 			gun.waveCleanup();
 		}
+	}
+	
+	public void equipGun(Gun gun) {
+		currentGun = guns.indexOf(gun);
+		guns.get(currentGun).setPosition(renderPosition);
+	}
+
+	public void giveGun(Gun gun) {
+		guns.add(gun);
+		equipGun(gun);
 	}
 }
