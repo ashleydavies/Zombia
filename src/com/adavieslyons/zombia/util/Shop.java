@@ -111,14 +111,32 @@ public class Shop {
 		graphics.setColor(Color.yellow);
 		graphics.drawString(selectedGun.getShopName(), tX + 217 + 12, tY + 261 + 12);
 		
-		if (!mouseInside(gc, 400, tY + 500, 400 + shopButton.getWidth(), tY + 500 + shopButton.getHeight())) {
+		
+		
+		// Set up the information about whether or not they can buy it.
+		boolean canBuy = true;
+		String whyNot = "";
+		if (player.hasGun(selectedGun.getClass())) {
+			canBuy = false;
+			whyNot = "Owned";
+		} else if (player.getMoney() < selectedGun.getPrice()) {
+			canBuy = false;
+			whyNot = "Not enough $";
+		}
+		
+		if (!mouseInside(gc, 400, tY + 500, 400 + shopButton.getWidth(), tY + 500 + shopButton.getHeight()) || !canBuy) {
 			graphics.drawImage(shopButton, 400, tY + 500);
 		} else {
 			graphics.drawImage(shopButtonDown, 400, tY + 500);
 		}
 		
-		graphics.setColor(Color.yellow);
-		graphics.drawString("Buy", 400 + shopButton.getWidth() / 2 - graphics.getFont().getWidth("Buy") / 2, tY + 500 + shopButton.getHeight() / 2 - graphics.getFont().getHeight("Buy") / 2);
+		if (canBuy) {
+			graphics.setColor(Color.yellow);
+			graphics.drawString("Buy", 400 + shopButton.getWidth() / 2 - graphics.getFont().getWidth("Buy") / 2, tY + 500 + shopButton.getHeight() / 2 - graphics.getFont().getHeight("Buy") / 2);
+		} else {
+			graphics.setColor(Color.red);
+			graphics.drawString(whyNot, 400 + shopButton.getWidth() / 2 - graphics.getFont().getWidth(whyNot) / 2, tY + 500 + shopButton.getHeight() / 2 - graphics.getFont().getHeight("Buy") / 2);
+		}
 		
 		if (player.hasGun(selectedGun.getClass())) {
 			graphics.setColor(Color.red);
@@ -126,6 +144,15 @@ public class Shop {
 		} else {
 			graphics.setColor(Color.yellow);
 			graphics.drawString("$" + selectedGun.getPrice(), tX + 543 - 12 - graphics.getFont().getWidth("$" + selectedGun.getPrice()), tY + 261 + 12);
+		}
+		
+		
+		
+		
+		// Now reload logic
+		
+		if (player.hasGun(selectedGun.getClass())) {
+			graphics.drawImage(shopButton, 400, tY + 450);
 		}
 	}
 	
