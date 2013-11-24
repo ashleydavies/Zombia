@@ -37,7 +37,7 @@ public class Zombie extends Entity {
 	public void init(GameContainer gc) {
 		//renderPosition = new Vector2f(0, 0);
 		velocity = new Vector2f(1, 0);
-		speed = 0.75f;
+		speed = 60.0f;
 	}
 	
 	@Override
@@ -50,13 +50,13 @@ public class Zombie extends Entity {
 			headAngle = armAngle;
 			
 			velocity.setTheta(angleToTurn - 90);
-			System.out.println(velocity);
-			System.out.println(delta);
+			
+			
 			position.add(
-					velocity.copy().scale(speed * (delta / 1000))
+					velocity.copy().scale(speed * (delta / 1000.0f))
 					);
 			
-			renderPosition.add(velocity.copy().scale(speed));
+			renderPosition = position;
 			
 			arms.setRotation(armAngle);
 			head.setRotation(headAngle);
@@ -85,5 +85,10 @@ public class Zombie extends Entity {
 		eManager.removeEntity(this);
 		wave.zombieDied(this);
 		player.giveMoney(moneyEarned);
+	}
+
+	@Override
+	public void waveCleanup() {
+		// How the hell is this even alive...? HAX!
 	}
 }

@@ -1,6 +1,5 @@
 package com.adavieslyons.zombia.entity;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -11,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 import com.adavieslyons.zombia.item.Gun;
+import com.adavieslyons.zombia.item.Magnum;
 import com.adavieslyons.zombia.item.Pistol;
 
 public class Player extends Entity {
@@ -31,6 +31,7 @@ public class Player extends Entity {
 		
 		guns = new ArrayList<Gun>();
 		guns.add(new Pistol(eManager));
+		currentGun = 0;
 	}
 	
 	@Override
@@ -105,5 +106,14 @@ public class Player extends Entity {
 
 	int getMoney() {
 		return money;
+	}
+
+	@Override
+	public void waveCleanup() {
+		// Clean up bullets
+		
+		for (Gun gun : guns) {
+			gun.waveCleanup();
+		}
 	}
 }

@@ -41,10 +41,9 @@ public class StateGame extends GameState {
 	
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
-		eManager.update(gc, delta);
-		
 		if (inWave) {
 			wave.update(gc, delta);
+			eManager.update(gc, delta);
 		}
 		else {
 			// Zombie wave intermission logic
@@ -56,6 +55,7 @@ public class StateGame extends GameState {
 				zombieWaveIntermissionTimer = 0.0f;
 				inWave = true;
 				wave = new ZombieWave(++waveNumber, eManager, player, this);
+				wave.initialise(gc);
 			}
 		}
 	}
@@ -84,5 +84,7 @@ public class StateGame extends GameState {
 		inWave = false;
 		zombieWaveIntermissionTimer = 30000.0f;
 		player.giveMoney((waveNumber + 1) * 25);
+		
+		eManager.callWaveCleanup();
 	}
 }

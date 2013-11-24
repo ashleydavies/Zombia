@@ -15,6 +15,7 @@ import com.adavieslyons.zombia.entity.EntityManager;
 
 public abstract class Gun {
 	private final String name;
+	private final String shopName;
 	Image gunImage;
 	Image muzzleImage;
 	private Image thumbnailImage;
@@ -44,13 +45,14 @@ public abstract class Gun {
 	float reloadTimer;
 	float recoilTimer;
 	
-	public Gun(String a_name, EntityManager eManager, int ammo, int ammoClipMax, float reloadTime, float recoilTime, int price, int ammoPrice) throws SlickException {
+	public Gun(String a_name, String shopName, EntityManager eManager, int ammo, int ammoClipMax, float reloadTime, float recoilTime, int price, int ammoPrice) throws SlickException {
 		gunImage = new Image("resource/img/" + a_name + ".png");
 		muzzleImage = new Image("resource/img/" + a_name + "_muzzleflash.png");
 		thumbnailImage = new Image("resource/img/" + a_name + "_thumbnail.png");
 		fireSound = new Sound("resource/snd/" + a_name + ".ogg");
 		reloadSound = new Sound("resource/snd/" + a_name + "_reload.ogg");
 		name = a_name;
+		this.shopName = shopName;
 		bullets = new ArrayList<Bullet>();
 		bulletsToBeDeleted = new ArrayList<Bullet>();
 		this.eManager = eManager;
@@ -182,6 +184,10 @@ public abstract class Gun {
 		return name;
 	}
 	
+	public String getShopName() {
+		return shopName;
+	}
+	
 	public int getPrice() {
 		return price;
 	}
@@ -191,4 +197,8 @@ public abstract class Gun {
 	}
 	
 	public abstract Bullet getNewBullet(Vector2f origin, float angle) throws SlickException;
+
+	public void waveCleanup() {
+		bullets.clear();		
+	}
 }

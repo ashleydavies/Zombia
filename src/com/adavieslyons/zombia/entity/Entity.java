@@ -24,6 +24,7 @@ public abstract class Entity {
 	public abstract void render(GameContainer gc, Graphics graphics);
 	public abstract void renderUI(GameContainer gc, Graphics graphics);
 	public abstract void init(GameContainer gc);
+	public abstract void waveCleanup();
 	
 	public void coreEntityUpdate(GameContainer gc, int delta) {
 		health += healthRegen * delta / 1000;

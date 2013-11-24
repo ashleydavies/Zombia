@@ -55,4 +55,11 @@ public class EntityManager {
 	public ArrayList<Entity> getEntities() {
 		return entities;
 	}
+
+	public void callWaveCleanup() {
+		// Calls all entities and notifies them the wave has ended, useful for clearing e.g. bullets
+		for (Entity e : entities) {
+			e.waveCleanup();
+		}
+	}
 }

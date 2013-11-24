@@ -32,8 +32,13 @@ public class ZombieWave {
 		// Hard code some things for the first few waves
 		switch (waveNumber) {
 			case 0:
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 25; i++) {
 					generateZombie(gc, Game.rnd.nextInt(1000) + 500);
+				}
+				break;
+			case 1:
+				for (int i = 0; i < 50; i++) {
+					generateZombie(gc, Game.rnd.nextInt(1500) + 500);
 				}
 		}
 	}
