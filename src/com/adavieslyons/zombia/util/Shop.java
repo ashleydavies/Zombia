@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 
 import com.adavieslyons.zombia.entity.EntityManager;
 import com.adavieslyons.zombia.entity.Player;
+import com.adavieslyons.zombia.item.AK47;
 import com.adavieslyons.zombia.item.Gun;
 import com.adavieslyons.zombia.item.Magnum;
 import com.adavieslyons.zombia.item.Pistol;
@@ -28,6 +29,7 @@ public class Shop {
 		
 		guns.add(new Pistol(eManager));
 		guns.add(new Magnum(eManager));
+		guns.add(new AK47(eManager));
 		gunSelected = 0;
 		
 		shopBackground = new Image("resource/img/shop.png");
@@ -62,6 +64,13 @@ public class Shop {
 		if (gc.getInput().isMouseButtonDown(0) && mouseInside(gc, 400, tY + 500, 400 + shopButton.getWidth(), tY + 500 + shopButton.getHeight())) {
 			if (player.getMoney() >= guns.get(gunSelected).getPrice() && !player.hasGun(guns.get(gunSelected).getClass())) {
 				buy(gunSelected);
+			}
+		}
+		
+		if (gc.getInput().isMouseButtonDown(0) && mouseInside(gc, 400, tY + 450, 400 + shopButton.getWidth(), tY + 450 + shopButton.getHeight())) {
+			if (player.hasGun(guns.get(gunSelected).getClass()) && guns.get(gunSelected).getAmmo() != guns.get(gunSelected).getAmmoMax()) {
+				System.out.println("Ammo purchased");
+				buyAmmo(gunSelected);
 			}
 		}
 	}
@@ -150,9 +159,36 @@ public class Shop {
 		
 		
 		// Now reload logic
+		boolean canBuyAmmo = true;
+		boolean displayAmmoError = true;
+		String whyNotAmmo = "";
+		if (!player.hasGun(selectedGun.getClass())) {
+			canBuyAmmo = false;
+			displayAmmoError = false;
+		} else if (selectedGun.getAmmo() == selectedGun.getAmmoMax()) {
+			canBuyAmmo = false;
+			whyNotAmmo = "Gun ammo full.";
+		}
 		
-		if (player.hasGun(selectedGun.getClass())) {
+		
+		if (canBuyAmmo) {
+			int price = getAmmoPrice(gunSelected);
+			
+			if (price > player.getMoney()) {
+				price = player.getMoney();
+			}
+			
+			if (mouseInside(gc, 400, tY + 450, 400 + shopButton.getWidth(), tY + 450 + shopButton.getHeight())) {
+				graphics.drawImage(shopButtonDown, 400, tY + 450);
+			} else {
+				graphics.drawImage(shopButton, 400, tY + 450);
+			}
+			graphics.setColor(Color.yellow);
+			graphics.drawString("Buy ammo: $" + price, 400 + shopButton.getWidth() / 2 - graphics.getFont().getWidth("Buy ammo: $" + price) / 2, tY + 450 + shopButton.getHeight() / 2 - graphics.getFont().getHeight("Buy ammo: $" + getAmmoPrice(gunSelected)) / 2);
+		} else if (displayAmmoError) {
 			graphics.drawImage(shopButton, 400, tY + 450);
+			graphics.setColor(Color.red);
+			graphics.drawString(whyNotAmmo, 400 + shopButton.getWidth() / 2 - graphics.getFont().getWidth(whyNotAmmo) / 2, tY + 450 + shopButton.getHeight() / 2 - graphics.getFont().getHeight(whyNotAmmo) / 2);
 		}
 	}
 	
@@ -164,6 +200,12 @@ public class Shop {
 		return false;
 	}
 	
+	public int getAmmoPrice(int i) {
+		float ammoPercent = (float)guns.get(i).getAmmo() / (float)guns.get(i).getAmmoMax();
+		ammoPercent = 1 - ammoPercent;
+		return (int) (guns.get(i).getAmmoPrice() * ammoPercent);
+	}
+	
 	public int getLocalX(GameContainer gc) {
 		return gc.getWidth() / 2 - shopBackground.getWidth() / 2;
 	}
@@ -171,9 +213,38 @@ public class Shop {
 	public int getLocalY(GameContainer gc) {
 		return gc.getHeight() / 2 - shopBackground.getHeight() / 2;
 	}
-
+	
 	public void buy(int i) {
 		player.giveMoney(-guns.get(i).getPrice());
 		player.giveGun(guns.get(i));
+	}
+	
+	public void buyAmmo(int i) {		
+		// Get the price the player is able to pay
+		int price = getAmmoPrice(i);
+		if (price > player.getMoney()) {
+			price = player.getMoney();
+		}
+		System.out.println("Price: " + price);
+		float ammoPercentToGive;
+		
+		if (!(guns.get(i).getAmmoPrice() == 0)) {
+			ammoPercentToGive = (float)price / (float)guns.get(i).getAmmoPrice();
+		} else {
+			ammoPercentToGive = 1;
+		}
+		
+		System.out.println("Percentage of max ammo to give: " + ammoPercentToGive);
+		
+		int ammo = (int) Math.ceil(guns.get(i).getAmmoMax() * ammoPercentToGive);
+		
+		player.giveMoney(-price);
+		
+		// Fix rounding problems. Ugly but it works and this game isn't going to be expanded much in the future. Hell, why not?
+		if (price == 0) {
+			ammo++;
+		}
+		
+		guns.get(i).addAmmo(ammo);
 	}
 }

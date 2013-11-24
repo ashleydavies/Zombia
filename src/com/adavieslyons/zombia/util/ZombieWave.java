@@ -33,13 +33,39 @@ public class ZombieWave {
 		switch (waveNumber) {
 			case 0:
 				for (int i = 0; i < 25; i++) {
-					//generateZombie(gc, Game.rnd.nextInt(1000) + 500);
+					generateZombie(gc, Game.rnd.nextInt(1600) + 500);
 				}
 				break;
 			case 1:
-				for (int i = 0; i < 50; i++) {
+				for (int i = 0; i < 25; i++) {
 					generateZombie(gc, Game.rnd.nextInt(1500) + 500);
 				}
+				break;
+			case 2:
+				for (int i = 0; i < 25; i++) {
+					generateZombie(gc, Game.rnd.nextInt(1400) + 500);
+				}
+				break;
+			case 3:
+				for (int i = 0; i < 25; i++) {
+					generateZombie(gc, Game.rnd.nextInt(1200) + 500);
+				}
+				break;
+			case 4:
+				for (int i = 0; i < 30; i++) {
+					generateZombie(gc, Game.rnd.nextInt(1500) + 500);
+				}
+				break;
+			case 5:
+				for (int i = 0; i < 40; i++) {
+					generateZombie(gc, Game.rnd.nextInt(2000) + 500);
+				}
+				break;
+			case 6:
+				for (int i = 0; i < 60; i++) {
+					generateZombie(gc, Game.rnd.nextInt(2500) + 500);
+				}
+				break;
 		}
 	}
 	

@@ -175,6 +175,13 @@ public abstract class Gun {
 		muzzleImage.setRotation(angle);
 	}
 	
+	public void addAmmo(int ammo) {
+		this.ammo += ammo;
+		if (this.ammo > ammoMax) {
+			this.ammo = ammoMax;
+		}
+	}
+	
 	public void removeBullet(Bullet bullet) {
 		bulletsToBeDeleted.add(bullet);
 	}
@@ -191,6 +198,10 @@ public abstract class Gun {
 		return shopName;
 	}
 	
+	public int getAmmo() {
+		return ammo;
+	}
+	
 	public int getPrice() {
 		return price;
 	}
@@ -203,5 +214,9 @@ public abstract class Gun {
 
 	public void waveCleanup() {
 		bullets.clear();		
+	}
+
+	public int getAmmoMax() {
+		return ammoMax;
 	}
 }
