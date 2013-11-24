@@ -18,7 +18,7 @@ public class Zombie extends Entity {
 	
 	float armAngle = 0.0f;
 	float headAngle = 0.0f;
-	int moneyEarned = 5;
+	int moneyEarned = 10;
 	Vector2f velocity;
 	float speed;
 	
