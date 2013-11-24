@@ -60,7 +60,7 @@ public class Shop {
 		}
 		
 		if (gc.getInput().isMouseButtonDown(0) && mouseInside(gc, 400, tY + 500, 400 + shopButton.getWidth(), tY + 500 + shopButton.getHeight())) {
-			if (player.getMoney() > guns.get(gunSelected).getPrice() && !player.hasGun(guns.get(gunSelected).getClass())) {
+			if (player.getMoney() >= guns.get(gunSelected).getPrice() && !player.hasGun(guns.get(gunSelected).getClass())) {
 				buy(gunSelected);
 			}
 		}
